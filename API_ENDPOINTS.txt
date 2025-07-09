@@ -1,0 +1,753 @@
+QR MENU SYSTEM - API ENDPOINTS DOCUMENTATION
+===============================================
+
+BASE URL: http://localhost/QR-Menu/ (or your domain)
+
+================================================================================
+AUTHENTICATION ENDPOINTS
+================================================================================
+
+1. USER REGISTRATION
+   Endpoint: POST /register
+   Description: Register a new user account
+   Parameters:
+     - name (string, required): Full name of the user
+     - contact (string, required): Email or phone number
+     - contact_type (string, required): "email" or "phone"
+     - password (string, required): Password (min 6 characters)
+     - confirm_password (string, required): Password confirmation
+     - terms (boolean, required): Terms and conditions acceptance
+     - g-recaptcha-response (string, required): Google reCAPTCHA token
+   Response: Redirects to /setup on success
+   Error Codes: 400 (validation errors)
+
+2. USER LOGIN
+   Endpoint: POST /login
+   Description: Authenticate user and create session
+   Parameters:
+     - login (string, required): Email, phone, or username
+     - password (string, required): User password
+     - remember (boolean, optional): Remember me checkbox
+     - g-recaptcha-response (string, required): Google reCAPTCHA token
+   Response: Redirects to /dashboard or /setup based on setup status
+   Error Codes: 401 (invalid credentials)
+
+3. LOGOUT
+   Endpoint: GET /logout
+   Description: Destroy user session and clear cookies
+   Parameters: None
+   Response: Redirects to home page
+   Session: Clears all session data and remember me cookie
+
+================================================================================
+VENDOR SETUP ENDPOINTS
+================================================================================
+
+4. VENDOR SETUP
+   Endpoint: POST /setup
+   Description: Complete vendor business profile setup
+   Parameters:
+     - business_name (string, required): Restaurant/hotel/shop name
+     - username (string, optional): Custom username (auto-generated if empty)
+     - address (string, required): Business address
+     - logo (file, optional): PNG logo file (max 200KB)
+   Response: Redirects to /dashboard on success
+   Error Codes: 400 (validation errors), 409 (username already exists)
+
+================================================================================
+DASHBOARD ENDPOINTS
+================================================================================
+
+5. DASHBOARD OVERVIEW
+   Endpoint: GET /dashboard
+   Description: Display vendor dashboard with analytics
+   Authentication: Required (user must be logged in and setup complete)
+   Response: HTML dashboard page with:
+     - Total QR scans
+     - Recent scan statistics (7 days)
+     - Menu statistics (categories, items)
+     - Recent menu items preview
+     - Business information
+
+6. MENU BUILDER
+   Endpoint: GET /dashboard/menu
+   Description: Display menu creation/editing interface
+   Authentication: Required
+   Response: HTML menu builder page
+
+7. SAVE MENU
+   Endpoint: POST /dashboard/menu
+   Description: Save menu data (categories and items)
+   Authentication: Required
+   Parameters:
+     - action (string, required): "save_menu"
+     - menu_data (string, required): JSON string containing menu structure
+   Menu Data Format:
+     [
+       {
+         "name": "Category Name",
+         "items": [
+           {
+             "name": "Item Name",
+             "price": 150.00
+           }
+         ]
+       }
+     ]
+   Response: Redirects to /dashboard/qr on success
+   Error Codes: 400 (validation errors)
+
+8. QR CODE GENERATOR
+   Endpoint: GET /dashboard/qr
+   Description: Display QR code generation interface
+   Authentication: Required
+   Response: HTML QR generator page with:
+     - QR code preview
+     - Download options (PNG, PDF)
+     - Print options
+     - Analytics data
+
+================================================================================
+PUBLIC MENU ENDPOINTS
+================================================================================
+
+9. PUBLIC MENU DISPLAY
+   Endpoint: GET /{username}
+   Description: Display public menu for customers
+   Parameters:
+     - username (string, required): Vendor's unique username
+   Response: HTML public menu page
+   Features:
+     - Automatic QR scan tracking
+     - Menu organized by categories
+     - Share functionality
+     - Mobile-responsive design
+   Error Codes: 404 (vendor not found)
+
+================================================================================
+ANALYTICS ENDPOINTS (Internal)
+================================================================================
+
+10. QR SCAN TRACKING
+    Endpoint: Internal (triggered on public menu access)
+    Description: Track QR code scans automatically
+    Data Stored:
+      - vendor_id (int): Vendor identifier
+      - ip_address (string): Visitor's IP address
+      - user_agent (string): Browser/device information
+      - scanned_at (timestamp): Scan timestamp
+
+11. SCAN STATISTICS
+    Endpoint: Internal (dashboard queries)
+    Description: Retrieve QR scan analytics
+    Queries:
+      - Total scans: SELECT COUNT(*) FROM qr_scans WHERE vendor_id = ?
+      - Today's scans: SELECT COUNT(*) FROM qr_scans WHERE vendor_id = ? AND DATE(scanned_at) = CURDATE()
+      - Weekly scans: SELECT COUNT(*) FROM qr_scans WHERE vendor_id = ? AND scanned_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      - Monthly scans: SELECT COUNT(*) FROM qr_scans WHERE vendor_id = ? AND scanned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+
+================================================================================
+FILE UPLOAD ENDPOINTS
+================================================================================
+
+12. LOGO UPLOAD
+    Endpoint: POST /setup (multipart/form-data)
+    Description: Upload vendor business logo
+    File Requirements:
+      - Format: PNG only
+      - Max Size: 200KB
+      - Storage: uploads/logos/ directory
+    Response: File path stored in database
+    Error Codes: 400 (invalid file type/size)
+
+================================================================================
+SESSION MANAGEMENT ENDPOINTS
+================================================================================
+
+13. REMEMBER ME FUNCTIONALITY
+    Endpoint: Internal (login process)
+    Description: Create persistent login session
+    Process:
+      - Generate random token
+      - Store in user_sessions table
+      - Set cookie with 30-day expiration
+    Cleanup: Automatic cleanup of expired sessions
+
+14. SESSION VALIDATION
+    Endpoint: Internal (all protected pages)
+    Description: Validate user session on protected pages
+    Process:
+      - Check $_SESSION['user_id']
+      - Validate remember me cookie if session expired
+      - Redirect to login if invalid
+
+================================================================================
+ERROR HANDLING ENDPOINTS
+================================================================================
+
+15. 404 ERROR PAGE
+    Endpoint: GET /{invalid-route}
+    Description: Handle invalid routes and missing pages
+    Response: Custom 404 error page
+    Features:
+      - User-friendly error message
+      - Navigation back to home/login
+
+================================================================================
+FRONTEND ROUTES (Client-side)
+================================================================================
+
+16. HOME PAGE
+    Endpoint: GET /
+    Description: Landing page with features and call-to-action
+    Response: HTML home page
+
+17. REGISTRATION PAGE
+    Endpoint: GET /register
+    Description: User registration form
+    Response: HTML registration page
+
+18. LOGIN PAGE
+    Endpoint: GET /login
+    Description: User login form
+    Response: HTML login page
+
+19. SETUP PAGE
+    Endpoint: GET /setup
+    Description: Vendor setup wizard
+    Authentication: Required (user must be logged in)
+    Response: HTML setup page
+
+================================================================================
+DATABASE TABLES REFERENCE
+================================================================================
+
+users:
+  - id (PRIMARY KEY)
+  - name, email, phone, password, google_id
+  - created_at, updated_at
+
+vendors:
+  - id (PRIMARY KEY)
+  - user_id (FOREIGN KEY)
+  - business_name, username, logo_path, address
+  - is_setup_complete
+  - created_at, updated_at
+
+menu_categories:
+  - id (PRIMARY KEY)
+  - vendor_id (FOREIGN KEY)
+  - name, sort_order
+  - created_at
+
+menu_items:
+  - id (PRIMARY KEY)
+  - category_id (FOREIGN KEY)
+  - name, price, sort_order
+  - created_at
+
+qr_scans:
+  - id (PRIMARY KEY)
+  - vendor_id (FOREIGN KEY)
+  - ip_address, user_agent
+  - scanned_at
+
+user_sessions:
+  - id (PRIMARY KEY)
+  - user_id (FOREIGN KEY)
+  - session_token, expires_at
+  - created_at
+
+================================================================================
+SECURITY FEATURES
+================================================================================
+
+1. SQL Injection Prevention:
+   - All database queries use prepared statements
+   - Parameterized queries with PDO
+
+2. XSS Protection:
+   - Output escaping with htmlspecialchars()
+   - Input validation and sanitization
+
+3. CSRF Protection:
+   - Form validation
+   - Session-based security
+
+4. File Upload Security:
+   - File type validation (PNG only)
+   - File size limits (200KB)
+   - Secure file naming (uniqid())
+
+5. Password Security:
+   - bcrypt hashing (PASSWORD_DEFAULT)
+   - Minimum length requirements
+
+6. Session Security:
+   - Secure session management
+   - Session timeout handling
+   - Remember me token security
+
+================================================================================
+CONFIGURATION REQUIREMENTS
+================================================================================
+
+1. Database Configuration (config/database.php):
+   - host, db_name, username, password
+
+2. Google reCAPTCHA:
+   - Site key for registration/login forms
+
+3. File Permissions:
+   - uploads/logos/ directory (755)
+   - Writable by web server
+
+4. Web Server Configuration:
+   - mod_rewrite enabled (Apache)
+   - URL rewriting rules (.htaccess)
+
+================================================================================
+RESPONSE CODES
+================================================================================
+
+200: Success
+301/302: Redirects (login, setup completion, etc.)
+400: Bad Request (validation errors)
+401: Unauthorized (invalid credentials)
+404: Not Found (invalid routes, vendor not found)
+500: Internal Server Error
+
+================================================================================
+NOTES
+================================================================================
+
+- All endpoints use clean URLs (no .php extensions)
+- Authentication is session-based
+- File uploads are restricted to specific formats and sizes
+- QR scan tracking is automatic on public menu access
+- Analytics are real-time and stored in database
+- Mobile-responsive design for all public pages
+- SEO-friendly URLs for public menus
+
+================================================================================
+URL ROUTING SYSTEM EXPLANATION
+================================================================================
+
+HOW URLS ARE DEFINED AND ROUTED
+================================
+
+1. URL STRUCTURE OVERVIEW
+   -----------------------
+   The system uses a clean URL structure without .php extensions:
+   
+   Base URL: http://localhost/QR-Menu/
+   
+   URL Patterns:
+   - /                    → Home page
+   - /register           → Registration page
+   - /login              → Login page
+   - /setup              → Setup wizard
+   - /dashboard          → Vendor dashboard
+   - /dashboard/menu     → Menu builder
+   - /dashboard/qr       → QR generator
+   - /logout             → Logout functionality
+   - /{username}         → Public menu (e.g., /tastybites_1234)
+
+2. ROUTING MECHANISM
+   ------------------
+   
+   A. .htaccess Configuration:
+   ```apache
+   RewriteEngine On
+   
+   # Handle all requests through index.php
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule ^(.*)$ index.php [QSA,L]
+   ```
+   
+   This rule:
+   - Captures all URLs that don't match existing files/directories
+   - Routes them to index.php with the full URL path
+   - Preserves query string parameters (QSA)
+   - Stops processing after this rule (L)
+
+   B. index.php Routing Logic:
+   ```php
+   // 1. Get the request URI
+   $request_uri = $_SERVER['REQUEST_URI'];
+   $script_name = $_SERVER['SCRIPT_NAME'];
+   
+   // 2. Auto-detect base path
+   $base_path = dirname($script_name);
+   if ($base_path === '/') {
+       $base_path = '';
+   } else {
+       $base_path .= '/';
+   }
+   
+   // 3. Remove base path from request URI
+   $path = str_replace($base_path, '', $request_uri);
+   $path = parse_url($path, PHP_URL_PATH);
+   $path = trim($path, '/');
+   
+   // 4. Split path into segments
+   $segments = explode('/', $path);
+   $page = $segments[0] ?? 'home';
+   
+   // 5. Handle dashboard routes
+   if ($page === 'dashboard' && isset($segments[1])) {
+       $page = 'dashboard/' . $segments[1];
+   }
+   ```
+
+3. ROUTE DEFINITION SYSTEM
+   ------------------------
+   
+   A. Route Mapping:
+   ```php
+   $routes = [
+       '' => 'home',                    // / → pages/home.php
+       'home' => 'home',                // /home → pages/home.php
+       'register' => 'register',        // /register → pages/register.php
+       'login' => 'login',              // /login → pages/login.php
+       'setup' => 'setup',              // /setup → pages/setup.php
+       'dashboard' => 'dashboard',      // /dashboard → pages/dashboard.php
+       'dashboard/menu' => 'menu-builder', // /dashboard/menu → pages/menu-builder.php
+       'dashboard/qr' => 'qr-generator',   // /dashboard/qr → pages/qr-generator.php
+       'logout' => 'logout'             // /logout → logout.php
+   ];
+   ```
+
+   B. Page Loading Logic:
+   ```php
+   // Get the page to load
+   $page_to_load = $routes[$page] ?? '404';
+   
+   // Special handling for public menu pages
+   if ($page_to_load === '404' && !empty($page) && preg_match('/^[a-zA-Z0-9_-]+$/', $page)) {
+       $page_to_load = 'public-menu';
+       $_GET['username'] = $page;
+   }
+   
+   // Load the appropriate page
+   $page_file = "pages/{$page_to_load}.php";
+   if (file_exists($page_file)) {
+       include $page_file;
+   } else {
+       include "pages/404.php";
+   }
+   ```
+
+4. URL PATTERN EXAMPLES
+   ---------------------
+   
+   A. Standard Pages:
+   - http://localhost/QR-Menu/ → index.php (routes to home)
+   - http://localhost/QR-Menu/register → index.php?page=register
+   - http://localhost/QR-Menu/login → index.php?page=login
+   - http://localhost/QR-Menu/setup → index.php?page=setup
+   
+   B. Dashboard Pages:
+   - http://localhost/QR-Menu/dashboard → index.php?page=dashboard
+   - http://localhost/QR-Menu/dashboard/menu → index.php?page=dashboard/menu
+   - http://localhost/QR-Menu/dashboard/qr → index.php?page=dashboard/qr
+   
+   C. Public Menu Pages:
+   - http://localhost/QR-Menu/tastybites_1234 → index.php?page=public-menu&username=tastybites_1234
+   - http://localhost/QR-Menu/restaurant_name → index.php?page=public-menu&username=restaurant_name
+   
+   D. Special Pages:
+   - http://localhost/QR-Menu/logout → index.php?page=logout
+
+5. AUTHENTICATION ROUTING
+   -----------------------
+   
+   A. Protected Routes:
+   ```php
+   $protected_pages = ['dashboard', 'menu-builder', 'qr-generator', 'setup'];
+   if (in_array($page_to_load, $protected_pages) && !isset($_SESSION['user_id'])) {
+       header('Location: ' . $base_path . 'login');
+       exit();
+   }
+   ```
+   
+   B. Setup Flow:
+   - User registers → redirects to /setup
+   - User logs in without setup → redirects to /setup
+   - User logs in with setup → redirects to /dashboard
+
+6. DYNAMIC BASE PATH DETECTION
+   ----------------------------
+   
+   The system automatically detects the base path:
+   ```php
+   $script_name = $_SERVER['SCRIPT_NAME']; // e.g., /QR-Menu/index.php
+   $base_path = dirname($script_name);      // e.g., /QR-Menu
+   
+   if ($base_path === '/') {
+       $base_path = '';                     // Root domain
+   } else {
+       $base_path .= '/';                   // Add trailing slash
+   }
+   ```
+   
+   This allows the system to work in different environments:
+   - Local: /QR-Menu/
+   - Subdomain: /subdomain/
+   - Root domain: /
+
+7. NAVIGATION LINK GENERATION
+   ---------------------------
+   
+   A. Header Navigation:
+   ```php
+   // Auto-detect base path for navigation links
+   $script_name = $_SERVER['SCRIPT_NAME'];
+   $base_path = dirname($script_name);
+   if ($base_path === '/') {
+       $base_path = '';
+   } else {
+       $base_path .= '/';
+   }
+   
+   // Generate links
+   <a href="<?php echo $base_path; ?>dashboard">Dashboard</a>
+   <a href="<?php echo $base_path; ?>login">Login</a>
+   ```
+
+   B. Form Actions:
+   ```php
+   <form action="<?php echo $base_path; ?>register" method="POST">
+   <form action="<?php echo $base_path; ?>login" method="POST">
+   ```
+
+8. ERROR HANDLING ROUTING
+   -----------------------
+   
+   A. 404 Handling:
+   - Invalid routes → pages/404.php
+   - Non-existent vendors → pages/404.php
+   - Missing files → pages/404.php
+   
+   B. Redirect Chains:
+   - Unauthenticated access → /login
+   - Incomplete setup → /setup
+   - Successful actions → appropriate dashboard pages
+
+9. URL VALIDATION PATTERNS
+   ------------------------
+   
+   A. Username Validation (for public menus):
+   ```php
+   preg_match('/^[a-zA-Z0-9_-]+$/', $page)
+   ```
+   - Allows: letters, numbers, hyphens, underscores
+   - Examples: tastybites_1234, restaurant-name, cafe123
+   
+   B. Dashboard Route Validation:
+   ```php
+   if ($page === 'dashboard' && isset($segments[1])) {
+       $page = 'dashboard/' . $segments[1];
+   }
+   ```
+   - Validates dashboard sub-routes
+   - Examples: dashboard/menu, dashboard/qr
+
+10. SEO-FRIENDLY URL STRUCTURE
+    ---------------------------
+    
+    A. Public Menu URLs:
+    - Clean: /tastybites_1234
+    - SEO-friendly: Easy to remember and share
+    - Mobile-friendly: Short and accessible
+    
+    B. Dashboard URLs:
+    - Intuitive: /dashboard/menu, /dashboard/qr
+    - Hierarchical: Clear organization
+    - User-friendly: Easy to understand
+
+11. ROUTING FLOW DIAGRAM
+    ---------------------
+    
+    Request → .htaccess → index.php → Route Detection → Page Loading
+    
+    1. User requests: /QR-Menu/login
+    2. .htaccess routes to: index.php
+    3. index.php processes: login
+    4. Route mapping finds: 'login' => 'login'
+    5. Loads file: pages/login.php
+    6. Renders: Login page
+
+12. TROUBLESHOOTING ROUTING ISSUES
+    -------------------------------
+    
+    A. Common Issues:
+    - mod_rewrite not enabled → Enable in Apache
+    - .htaccess not working → Check file permissions
+    - Base path incorrect → Check server configuration
+    - 404 errors → Verify route definitions
+    
+    B. Debug Steps:
+    - Check .htaccess syntax
+    - Verify mod_rewrite is enabled
+    - Test with test-routing.php
+    - Check server error logs
+
+================================================================================
+FUTURE API ENHANCEMENTS
+================================================================================
+
+Planned endpoints for future versions:
+- RESTful API for mobile applications
+- Webhook endpoints for third-party integrations
+- Advanced analytics API
+- Bulk menu import/export
+- Payment gateway integration
+- Order management system
+- Inventory tracking API
+- Multi-language support API 
+
+================================================================================
+URL ROUTING: STEP-BY-STEP EXAMPLES FOR EACH URL
+================================================================================
+
+Below is how each main URL is routed in your system, with the actual code involved at each step:
+
+-------------------------------------------------------------------------------
+1. /QR-Menu/login
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/login`
+- **.htaccess says:**
+  ```apache
+  # .htaccess
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.php [QSA,L]
+  ```
+  This means: If the file/folder doesn't exist, send everything to `index.php`.
+- **index.php says:**
+  ```php
+  // index.php
+  $path = trim($path, '/');
+  $segments = explode('/', $path);
+  $page = $segments[0] ?? 'home';
+  $routes = [
+    ...
+    'login' => 'login',
+    ...
+  ];
+  $page_to_load = $routes[$page] ?? '404';
+  ```
+  This means: If you typed 'login', set `$page_to_load = 'login'`.
+- **index.php loads:**
+  ```php
+  $page_file = "pages/{$page_to_load}.php"; // pages/login.php
+  include $page_file;
+  ```
+- **You see:** The login page, just like if you visited `/QR-Menu/pages/login.php` directly.
+
+-------------------------------------------------------------------------------
+2. /QR-Menu/register
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/register`
+- **.htaccess says:** Send to `index.php` (same as above)
+- **index.php says:** `$page = 'register'` → `$page_to_load = 'register'`
+- **index.php loads:** `pages/register.php`
+- **You see:** The registration page.
+
+-------------------------------------------------------------------------------
+3. /QR-Menu/dashboard
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/dashboard`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:** `$page = 'dashboard'` → `$page_to_load = 'dashboard'`
+- **index.php loads:** `pages/dashboard.php`
+- **You see:** The dashboard page.
+
+-------------------------------------------------------------------------------
+4. /QR-Menu/dashboard/menu
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/dashboard/menu`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:**
+  ```php
+  if ($page === 'dashboard' && isset($segments[1])) {
+      $page = 'dashboard/' . $segments[1]; // 'dashboard/menu'
+  }
+  $routes = [ ... 'dashboard/menu' => 'menu-builder', ... ];
+  $page_to_load = $routes[$page] ?? '404';
+  ```
+- **index.php loads:** `pages/menu-builder.php`
+- **You see:** The menu builder page.
+
+-------------------------------------------------------------------------------
+5. /QR-Menu/dashboard/qr
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/dashboard/qr`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:** `$page = 'dashboard/qr'` → `$page_to_load = 'qr-generator'`
+- **index.php loads:** `pages/qr-generator.php`
+- **You see:** The QR generator page.
+
+-------------------------------------------------------------------------------
+6. /QR-Menu/setup
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/setup`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:** `$page = 'setup'` → `$page_to_load = 'setup'`
+- **index.php loads:** `pages/setup.php`
+- **You see:** The setup wizard page.
+
+-------------------------------------------------------------------------------
+7. /QR-Menu/logout
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/logout`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:** `$page = 'logout'` → `$page_to_load = 'logout'`
+- **index.php loads:** `logout.php`
+- **You see:** You are logged out and redirected.
+
+-------------------------------------------------------------------------------
+8. /QR-Menu/tastybites_1234 (or any username)
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/tastybites_1234`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:**
+  ```php
+  // If not a defined route, but matches username pattern:
+  if ($page_to_load === '404' && !empty($page) && preg_match('/^[a-zA-Z0-9_-]+$/', $page)) {
+      $page_to_load = 'public-menu';
+      $_GET['username'] = $page;
+  }
+  ```
+- **index.php loads:** `pages/public-menu.php` (with the username in $_GET)
+- **You see:** The public menu for that vendor.
+
+-------------------------------------------------------------------------------
+9. /QR-Menu/anything-else (invalid route)
+-------------------------------------------------------------------------------
+In Simple Steps:
+- **You type:** `/QR-Menu/anything-else`
+- **.htaccess says:** Send to `index.php`
+- **index.php says:** No matching route, not a valid username
+- **index.php loads:** `pages/404.php`
+- **You see:** The 404 error page.
+
+-------------------------------------------------------------------------------
+
+**Summary:**
+- All clean URLs are routed by .htaccess to index.php
+- index.php decides which PHP file to load based on the URL
+- You always see the correct page, even though the URL is short and clean!
+
+================================================================================ 
