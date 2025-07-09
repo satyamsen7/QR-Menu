@@ -145,14 +145,54 @@ include 'includes/header.php';
     </div>
 
     <!-- Footer -->
-    <div class="bg-white border-t mt-12">
-        <div class="max-w-4xl mx-auto px-4 py-6">
-            <div class="text-center">
-                <p class="text-sm text-gray-600">
-                    Powered by <span class="font-medium text-blue-600">QR Menu System</span>
+    <div class="bg-gray-800 text-white mt-12">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Restaurant Details -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4"><?php echo htmlspecialchars($vendor['business_name']); ?></h3>
+                    <div class="space-y-2 text-gray-300">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i><?php echo htmlspecialchars($vendor['address']); ?></p>
+                        <?php if (!empty($vendor['phone'])): ?>
+                            <p><i class="fas fa-phone mr-2"></i><?php echo htmlspecialchars($vendor['phone']); ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($vendor['email'])): ?>
+                            <p><i class="fas fa-envelope mr-2"></i><?php echo htmlspecialchars($vendor['email']); ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($vendor['website'])): ?>
+                            <p><i class="fas fa-globe mr-2"></i><a href="<?php echo htmlspecialchars($vendor['website']); ?>" target="_blank" class="hover:text-white"><?php echo htmlspecialchars($vendor['website']); ?></a></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button onclick="openShareModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            <i class="fas fa-share-alt mr-2"></i>Share Menu
+                        </button>
+                        <?php if (!empty($vendor['phone'])): ?>
+                            <a href="tel:<?php echo htmlspecialchars($vendor['phone']); ?>" class="block w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium text-center">
+                                <i class="fas fa-phone mr-2"></i>Call Now
+                            </a>
+                        <?php endif; ?>
+                        <?php if (!empty($vendor['email'])): ?>
+                            <a href="mailto:<?php echo htmlspecialchars($vendor['email']); ?>" class="block w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium text-center">
+                                <i class="fas fa-envelope mr-2"></i>Email Us
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Powered by Section -->
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">
+                    Powered by <span class="font-semibold text-blue-400">Satyam</span>
                 </p>
                 <p class="text-xs text-gray-500 mt-1">
-                    Scan the QR code to view this menu anytime
+                    Digital Menu Solutions | Scan QR code to view this menu anytime
                 </p>
             </div>
         </div>
@@ -276,4 +316,4 @@ style.textContent = `
 document.head.appendChild(style);
 </script>
 
-<?php include 'includes/footer.php'; ?> 
+ 
