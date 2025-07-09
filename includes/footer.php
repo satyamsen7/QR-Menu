@@ -14,25 +14,63 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">QR Menu System</h3>
-                    <p class="text-gray-300">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <!-- Footer for authenticated users -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">QR Menu System</h3>
+                        <p class="text-gray-300">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Dashboard</h3>
+                        <ul class="space-y-2">
+                            <li><a href="<?php echo $base_path; ?>dashboard" class="text-gray-300 hover:text-white">Overview</a></li>
+                            <li><a href="<?php echo $base_path; ?>dashboard/menu" class="text-gray-300 hover:text-white">Menu Builder</a></li>
+                            <li><a href="<?php echo $base_path; ?>dashboard/qr" class="text-gray-300 hover:text-white">QR Code</a></li>
+                            <li><a href="<?php echo $base_path; ?>profile" class="text-gray-300 hover:text-white">Profile</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Support</h3>
+                        <ul class="space-y-2">
+                            <li><a href="<?php echo $base_path; ?>terms" class="text-gray-300 hover:text-white">Terms & Conditions</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white">Help Center</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white">Tutorials</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                        <p class="text-gray-300">Email: support@qrmenu.com</p>
+                        <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
+                        <div class="mt-3">
+                            <a href="<?php echo $base_path; ?>logout" class="text-red-400 hover:text-red-300 text-sm">
+                                <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="<?php echo $base_path; ?>" class="text-gray-300 hover:text-white">Home</a></li>
-                        <li><a href="<?php echo $base_path; ?>register" class="text-gray-300 hover:text-white">Register</a></li>
-                        <li><a href="<?php echo $base_path; ?>login" class="text-gray-300 hover:text-white">Login</a></li>
-                    </ul>
+            <?php else: ?>
+                <!-- Footer for non-authenticated users -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">QR Menu System</h3>
+                        <p class="text-gray-300">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="<?php echo $base_path; ?>" class="text-gray-300 hover:text-white">Home</a></li>
+                            <li><a href="<?php echo $base_path; ?>register" class="text-gray-300 hover:text-white">Register</a></li>
+                            <li><a href="<?php echo $base_path; ?>login" class="text-gray-300 hover:text-white">Login</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                        <p class="text-gray-300">Email: support@qrmenu.com</p>
+                        <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                    <p class="text-gray-300">Email: support@qrmenu.com</p>
-                    <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
-                </div>
-            </div>
+            <?php endif; ?>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center">
                 <p class="text-gray-300">&copy; 2024 QR Menu System. All rights reserved.</p>
             </div>
