@@ -110,6 +110,34 @@
                 spinner.remove();
             }
         }
+        
+        // Password validation for profile page
+        function validatePassword() {
+            const newPassword = document.getElementById('new_password');
+            const confirmPassword = document.getElementById('confirm_password');
+            
+            if (newPassword && confirmPassword) {
+                if (newPassword.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity('Passwords do not match');
+                    return false;
+                } else {
+                    confirmPassword.setCustomValidity('');
+                    return true;
+                }
+            }
+            return true;
+        }
+        
+        // Initialize password validation on profile page
+        document.addEventListener('DOMContentLoaded', function() {
+            const newPassword = document.getElementById('new_password');
+            const confirmPassword = document.getElementById('confirm_password');
+            
+            if (newPassword && confirmPassword) {
+                newPassword.addEventListener('input', validatePassword);
+                confirmPassword.addEventListener('input', validatePassword);
+            }
+        });
     </script>
 </body>
 </html> 

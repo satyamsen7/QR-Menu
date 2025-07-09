@@ -23,6 +23,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <!-- html2canvas for capturing QR design as image -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <!-- Sortable.js for drag and drop functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
     <!-- Custom CSS -->
     <style>
@@ -74,6 +76,9 @@
                                 <i class="fas fa-chevron-down ml-1"></i>
                             </button>
                             <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                                <a href="<?php echo $base_path; ?>profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user-cog mr-2"></i>Profile
+                                </a>
                                 <a href="<?php echo $base_path; ?>logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                                 </a>

@@ -107,16 +107,6 @@ include 'includes/header.php';
                     <h1 class="text-3xl font-bold text-gray-900">Menu Builder</h1>
                     <p class="mt-2 text-gray-600">Create and manage your digital menu</p>
                 </div>
-                <div class="flex space-x-3">
-                    <button type="button" onclick="addCategory()" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                        <i class="fas fa-plus mr-2"></i>Add Category
-                    </button>
-                    <button type="button" onclick="saveMenu()" 
-                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                        <i class="fas fa-save mr-2"></i>Save Menu
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -130,18 +120,36 @@ include 'includes/header.php';
                     <input type="hidden" name="action" value="save_menu">
                     <input type="hidden" name="menu_data" id="menuData" value="">
                     
-                    <div id="menuContainer" class="space-y-6">
+                    <div id="menuContainer" class="space-y-8">
                         <!-- Menu categories will be dynamically added here -->
                     </div>
                     
-                    <div id="emptyState" class="text-center py-12 <?php echo empty($menu_structure) ? '' : 'hidden'; ?>">
-                        <i class="fas fa-utensils text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">No menu items yet</h3>
-                        <p class="text-gray-600 mb-4">Start by adding your first category and menu items</p>
+                    <!-- Add Category Button -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
                         <button type="button" onclick="addCategory()" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
+                            <i class="fas fa-plus mr-2"></i>Add Category
+                        </button>
+                    </div>
+                    
+                    <div id="emptyState" class="text-center py-16 <?php echo empty($menu_structure) ? '' : 'hidden'; ?>">
+                        <i class="fas fa-utensils text-6xl text-gray-300 mb-6"></i>
+                        <h3 class="text-xl font-medium text-gray-900 mb-3">No menu items yet</h3>
+                        <p class="text-gray-600 mb-6 text-lg">Start by adding your first category and menu items</p>
+                        <button type="button" onclick="addCategory()" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
                             <i class="fas fa-plus mr-2"></i>Add Your First Category
                         </button>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <div class="flex justify-end">
+                            <button type="button" onclick="saveMenu()" 
+                                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-base font-medium">
+                                <i class="fas fa-save mr-2"></i>Save Menu
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -151,41 +159,43 @@ include 'includes/header.php';
 
 <!-- Template for category -->
 <template id="categoryTemplate">
-    <div class="category-item border border-gray-200 rounded-lg p-4" data-category-id="">
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-grip-vertical text-gray-400 cursor-move handle"></i>
-                <input type="text" class="category-name border border-gray-300 rounded-md px-3 py-2 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Category Name" required>
+    <div class="category-item border border-gray-200 rounded-lg p-6 draggable-category" data-category-id="">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
+                <input type="text" class="category-name border border-gray-300 rounded-lg px-4 py-3 text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Category Name" required>
             </div>
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="addItem(this)" 
-                        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                    <i class="fas fa-plus mr-1"></i>Add Item
-                </button>
+            <div class="flex items-center space-x-3">
                 <button type="button" onclick="removeCategory(this)" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                    <i class="fas fa-trash mr-1"></i>Remove
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-base font-medium">
+                    <i class="fas fa-trash mr-2"></i>Remove
                 </button>
             </div>
         </div>
-        <div class="category-items space-y-3">
+        <div class="category-items space-y-4 sortable-items">
             <!-- Items will be added here -->
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-200">
+            <button type="button" onclick="addItem(this)" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-base font-medium">
+                <i class="fas fa-plus mr-2"></i>Add Item
+            </button>
         </div>
     </div>
 </template>
 
 <!-- Template for item -->
 <template id="itemTemplate">
-    <div class="item-row flex items-center space-x-3 p-3 bg-gray-50 rounded border" data-item-id="">
-        <i class="fas fa-grip-vertical text-gray-400 cursor-move handle"></i>
-        <input type="text" class="item-name flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Item Name" required>
-        <div class="flex items-center space-x-2">
-            <span class="text-gray-600">₹</span>
-            <input type="number" class="item-price w-24 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00" step="0.01" min="0" required>
+    <div class="item-row flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-200 draggable-item" data-item-id="">
+        <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
+        <input type="text" class="item-name flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Item Name" required>
+        <div class="flex items-center space-x-3">
+            <span class="text-gray-600 text-lg font-medium">₹</span>
+            <input type="number" class="item-price w-32 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00" step="0.01" min="0" required>
         </div>
         <button type="button" onclick="removeItem(this)" 
-                class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm">
-            <i class="fas fa-times"></i>
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-base font-medium">
+            <i class="fas fa-times mr-1"></i>Remove
         </button>
     </div>
 </template>
@@ -201,10 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
         menuData.forEach(category => {
             addCategory(category);
         });
+    } else {
+        // Initialize drag and drop for empty container
+        initializeDragAndDrop();
     }
-    
-    // Initialize drag and drop
-    initializeDragAndDrop();
 });
 
 function addCategory(existingCategory = null) {
@@ -231,11 +241,25 @@ function addCategory(existingCategory = null) {
     }
     
     container.appendChild(categoryElement);
+    
+    // Initialize drag and drop for the new category
+    const newCategoryItems = categoryDiv.querySelector('.sortable-items');
+    if (newCategoryItems) {
+        new Sortable(newCategoryItems, {
+            animation: 150,
+            handle: '.drag-handle',
+            onEnd: function() {
+                updateMenuData();
+            }
+        });
+    }
+    
     updateMenuData();
 }
 
-function addItem(categoryElement, existingItem = null) {
-    const itemsContainer = categoryElement.closest('.category-item').querySelector('.category-items');
+function addItem(button, existingItem = null) {
+    const categoryElement = button.closest('.category-item');
+    const itemsContainer = categoryElement.querySelector('.category-items');
     const template = document.getElementById('itemTemplate');
     
     // Clone template
@@ -315,9 +339,30 @@ function saveMenu() {
 }
 
 function initializeDragAndDrop() {
-    // This would implement drag and drop functionality for reordering
-    // For now, we'll use a simple implementation
-    console.log('Drag and drop initialized');
+    // Initialize Sortable for categories
+    const menuContainer = document.getElementById('menuContainer');
+    if (menuContainer) {
+        new Sortable(menuContainer, {
+            animation: 150,
+            handle: '.drag-handle',
+            draggable: '.draggable-category',
+            onEnd: function() {
+                updateMenuData();
+            }
+        });
+    }
+    
+    // Initialize Sortable for items within each category
+    document.querySelectorAll('.sortable-items').forEach(container => {
+        new Sortable(container, {
+            animation: 150,
+            handle: '.drag-handle',
+            draggable: '.draggable-item',
+            onEnd: function() {
+                updateMenuData();
+            }
+        });
+    });
 }
 
 // Auto-save functionality
@@ -326,7 +371,6 @@ function scheduleAutoSave() {
     clearTimeout(autoSaveTimer);
     autoSaveTimer = setTimeout(() => {
         updateMenuData();
-        console.log('Menu auto-saved');
     }, 2000);
 }
 
@@ -334,6 +378,25 @@ function scheduleAutoSave() {
 document.addEventListener('input', function(e) {
     if (e.target.matches('.category-name, .item-name, .item-price')) {
         scheduleAutoSave();
+    }
+});
+
+// Add hover effects for better desktop experience
+document.addEventListener('mouseover', function(e) {
+    if (e.target.closest('.category-item')) {
+        e.target.closest('.category-item').classList.add('shadow-md');
+    }
+    if (e.target.closest('.item-row')) {
+        e.target.closest('.item-row').classList.add('shadow-sm');
+    }
+});
+
+document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('.category-item')) {
+        e.target.closest('.category-item').classList.remove('shadow-md');
+    }
+    if (e.target.closest('.item-row')) {
+        e.target.closest('.item-row').classList.remove('shadow-sm');
     }
 });
 </script>

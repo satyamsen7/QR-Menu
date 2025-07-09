@@ -37,6 +37,8 @@ $routes = [
     'dashboard' => 'dashboard',
     'dashboard/menu' => 'menu-builder',
     'dashboard/qr' => 'qr-generator',
+    'profile' => 'profile',
+    'terms' => 'terms',
     'logout' => 'logout'
 ];
 
@@ -50,7 +52,7 @@ if ($page_to_load === '404' && !empty($page) && preg_match('/^[a-zA-Z0-9_-]+$/',
 }
 
 // Check authentication for protected pages
-$protected_pages = ['dashboard', 'menu-builder', 'qr-generator', 'setup'];
+$protected_pages = ['dashboard', 'menu-builder', 'qr-generator', 'setup', 'profile'];
 if (in_array($page_to_load, $protected_pages) && !isset($_SESSION['user_id'])) {
     header('Location: ' . $base_path . 'login');
     exit();

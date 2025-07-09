@@ -29,29 +29,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Handle logo upload
-    $logo_path = null;
+    $logo_data = null;
+    $logo_type = null;
     if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
         $file = $_FILES['logo'];
-        $allowed_types = ['image/png'];
-        $max_size = 200 * 1024; // 200 KB
+        $allowed_types = ['image/png', 'image/jpeg', 'image/gif'];
+        $max_size = 1 * 1024 * 1024; // 1MB
         
         if (!in_array($file['type'], $allowed_types)) {
-            $errors[] = "Logo must be a PNG file";
+            $errors[] = "Logo must be a PNG, JPEG, or GIF file";
         } elseif ($file['size'] > $max_size) {
-            $errors[] = "Logo size must be less than 200 KB";
+            $errors[] = "Logo size must be less than 1MB";
         } else {
-            // Create uploads directory if it doesn't exist
-            $upload_dir = 'uploads/logos/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
+            // Read the file content
+            $logo_data = file_get_contents($file['tmp_name']);
+            $logo_type = $file['type'];
             
-            $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $file_extension;
-            $logo_path = $upload_dir . $filename;
-            
-            if (!move_uploaded_file($file['tmp_name'], $logo_path)) {
-                $errors[] = "Failed to upload logo";
+            if ($logo_data === false) {
+                $errors[] = "Failed to read logo file";
             }
         }
     }
@@ -88,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // If no errors, create vendor record
     if (empty($errors)) {
-        $stmt = $db->prepare("INSERT INTO vendors (user_id, business_name, username, logo_path, address, is_setup_complete) VALUES (?, ?, ?, ?, ?, TRUE)");
+        $stmt = $db->prepare("INSERT INTO vendors (user_id, business_name, username, logo_data, logo_type, address, is_setup_complete) VALUES (?, ?, ?, ?, ?, ?, TRUE)");
         
-        if ($stmt->execute([$_SESSION['user_id'], $business_name, $username, $logo_path, $address])) {
+        if ($stmt->execute([$_SESSION['user_id'], $business_name, $username, $logo_data, $logo_type, $address])) {
             $_SESSION['setup_complete'] = true;
             $_SESSION['vendor_username'] = $username;
             
@@ -152,9 +147,9 @@ include 'includes/header.php';
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <input id="logo" name="logo" type="file" accept=".png"
+                                    <input id="logo" name="logo" type="file" accept="image/*"
                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                    <p class="mt-1 text-xs text-gray-500">PNG files only, max 200 KB</p>
+                                    <p class="mt-1 text-xs text-gray-500">PNG, JPEG, or GIF files, max 1MB</p>
                                 </div>
                             </div>
                         </div>

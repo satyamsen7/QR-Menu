@@ -174,7 +174,7 @@ include 'includes/header.php';
                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                     <label for="terms" class="ml-2 block text-sm text-gray-900">
                         I agree to the 
-                        <a href="#" class="text-blue-600 hover:text-blue-500">Terms and Conditions</a>
+                        <a href="terms" target="_blank" class="text-blue-600 hover:text-blue-500 underline">Terms and Conditions</a>
                     </label>
                 </div>
 

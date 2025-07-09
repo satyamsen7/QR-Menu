@@ -17,7 +17,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 // Get vendor information
-$stmt = $db->prepare("SELECT * FROM vendors WHERE user_id = ?");
+$stmt = $db->prepare("SELECT *, logo_data, logo_type FROM vendors WHERE user_id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $vendor = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -208,8 +208,8 @@ include 'includes/header.php';
                     </div>
                     <div>
                         <h4 class="text-sm font-medium text-gray-700 mb-2">Logo</h4>
-                        <?php if ($vendor['logo_path']): ?>
-                            <img src="<?php echo htmlspecialchars($vendor['logo_path']); ?>" 
+                        <?php if (!empty($vendor['logo_data'])): ?>
+                            <img src="/QR-Menu/logo-img.php" 
                                  alt="Business Logo" 
                                  class="w-20 h-20 object-cover rounded-lg border">
                         <?php else: ?>
