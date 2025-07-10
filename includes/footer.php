@@ -16,63 +16,97 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <!-- Footer for authenticated users -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-4">QR Menu System</h3>
-                        <p class="text-gray-300">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                    <div class="sm:col-span-2 lg:col-span-1">
+                        <h3 class="text-lg font-semibold mb-3 lg:mb-4">QR Menu System</h3>
+                        <p class="text-gray-300 text-sm lg:text-base leading-relaxed">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4">Dashboard</h3>
+                        <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Dashboard</h3>
                         <ul class="space-y-2">
-                            <li><a href="<?php echo $base_path; ?>dashboard" class="text-gray-300 hover:text-white">Overview</a></li>
-                            <li><a href="<?php echo $base_path; ?>dashboard/menu" class="text-gray-300 hover:text-white">Menu Builder</a></li>
-                            <li><a href="<?php echo $base_path; ?>dashboard/qr" class="text-gray-300 hover:text-white">QR Code</a></li>
-                            <li><a href="<?php echo $base_path; ?>profile" class="text-gray-300 hover:text-white">Profile</a></li>
+                            <li><a href="<?php echo $base_path; ?>dashboard" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-tachometer-alt mr-2 text-xs"></i>Overview
+                            </a></li>
+                            <li><a href="<?php echo $base_path; ?>dashboard/menu" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-utensils mr-2 text-xs"></i>Menu Builder
+                            </a></li>
+                            <li><a href="<?php echo $base_path; ?>dashboard/qr" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-qrcode mr-2 text-xs"></i>QR Code
+                            </a></li>
+                            <li><a href="<?php echo $base_path; ?>profile" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-user-cog mr-2 text-xs"></i>Profile
+                            </a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4">Support</h3>
+                        <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Support</h3>
                         <ul class="space-y-2">
-                            <li><a href="<?php echo $base_path; ?>terms" class="text-gray-300 hover:text-white">Terms & Conditions</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">Help Center</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">Tutorials</a></li>
+                            <li><a href="<?php echo $base_path; ?>terms" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-file-contract mr-2 text-xs"></i>Terms & Conditions
+                            </a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-question-circle mr-2 text-xs"></i>Help Center
+                            </a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-play-circle mr-2 text-xs"></i>Tutorials
+                            </a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                        <p class="text-gray-300">Email: support@qrmenu.com</p>
-                        <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
-                        <div class="mt-3">
-                            <a href="<?php echo $base_path; ?>logout" class="text-red-400 hover:text-red-300 text-sm">
-                                <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                        <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Contact</h3>
+                        <div class="space-y-2">
+                            <p class="text-gray-300 text-sm lg:text-base flex items-center">
+                                <i class="fas fa-envelope mr-2 text-xs"></i>support@qrmenu.com
+                            </p>
+                            <p class="text-gray-300 text-sm lg:text-base flex items-center">
+                                <i class="fas fa-phone mr-2 text-xs"></i>+1 (555) 123-4567
+                            </p>
+                        </div>
+                        <div class="mt-4">
+                            <a href="<?php echo $base_path; ?>logout" class="text-red-400 hover:text-red-300 text-sm transition-colors duration-200 flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </a>
                         </div>
                     </div>
                 </div>
             <?php else: ?>
                 <!-- Footer for non-authenticated users -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-4">QR Menu System</h3>
-                        <p class="text-gray-300">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <div class="sm:col-span-2 lg:col-span-1">
+                        <h3 class="text-lg font-semibold mb-3 lg:mb-4">QR Menu System</h3>
+                        <p class="text-gray-300 text-sm lg:text-base leading-relaxed">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Quick Links</h3>
                         <ul class="space-y-2">
-                            <li><a href="<?php echo $base_path; ?>" class="text-gray-300 hover:text-white">Home</a></li>
-                            <li><a href="<?php echo $base_path; ?>register" class="text-gray-300 hover:text-white">Register</a></li>
-                            <li><a href="<?php echo $base_path; ?>login" class="text-gray-300 hover:text-white">Login</a></li>
+                            <li><a href="<?php echo $base_path; ?>" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-home mr-2 text-xs"></i>Home
+                            </a></li>
+                            <li><a href="<?php echo $base_path; ?>register" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-user-plus mr-2 text-xs"></i>Register
+                            </a></li>
+                            <li><a href="<?php echo $base_path; ?>login" class="text-gray-300 hover:text-white text-sm lg:text-base transition-colors duration-200 flex items-center">
+                                <i class="fas fa-sign-in-alt mr-2 text-xs"></i>Login
+                            </a></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                        <p class="text-gray-300">Email: support@qrmenu.com</p>
-                        <p class="text-gray-300">Phone: +1 (555) 123-4567</p>
+                        <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Contact</h3>
+                        <div class="space-y-2">
+                            <p class="text-gray-300 text-sm lg:text-base flex items-center">
+                                <i class="fas fa-envelope mr-2 text-xs"></i>support@qrmenu.com
+                            </p>
+                            <p class="text-gray-300 text-sm lg:text-base flex items-center">
+                                <i class="fas fa-phone mr-2 text-xs"></i>+1 (555) 123-4567
+                            </p>
+                        </div>
                     </div>
                 </div>
             <?php endif; ?>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-                <p class="text-gray-300">&copy; 2024 QR Menu System. All rights reserved.</p>
+            
+            <!-- Footer bottom -->
+            <div class="border-t border-gray-700 mt-6 lg:mt-8 pt-6 lg:pt-8 text-center">
+                <p class="text-gray-300 text-sm lg:text-base">&copy; 2024 QR Menu System. All rights reserved.</p>
             </div>
         </div>
     </footer>
