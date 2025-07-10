@@ -99,23 +99,23 @@ include 'includes/header.php';
 ?>
 
 <div class="py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Menu Builder</h1>
-                    <p class="mt-2 text-gray-600">Create and manage your digital menu</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Menu Builder</h1>
+                    <p class="mt-2 text-gray-600 text-base sm:text-lg">Create and manage your digital menu</p>
                 </div>
             </div>
         </div>
 
         <!-- Menu Builder -->
         <div class="bg-white shadow rounded-lg">
-            <div class="px-6 py-4 border-b border-gray-200">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Your Menu</h3>
             </div>
-            <div class="p-6">
+            <div class="p-2 sm:p-6">
                 <form id="menuForm" method="POST">
                     <input type="hidden" name="action" value="save_menu">
                     <input type="hidden" name="menu_data" id="menuData" value="">
@@ -127,7 +127,7 @@ include 'includes/header.php';
                     <!-- Add Category Button -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <button type="button" onclick="addCategory()" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
+                                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
                             <i class="fas fa-plus mr-2"></i>Add Category
                         </button>
                     </div>
@@ -137,16 +137,16 @@ include 'includes/header.php';
                         <h3 class="text-xl font-medium text-gray-900 mb-3">No menu items yet</h3>
                         <p class="text-gray-600 mb-6 text-lg">Start by adding your first category and menu items</p>
                         <button type="button" onclick="addCategory()" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
+                                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium">
                             <i class="fas fa-plus mr-2"></i>Add Your First Category
                         </button>
                     </div>
                     
                     <!-- Save Button -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <div class="flex justify-end">
+                        <div class="flex flex-col sm:flex-row justify-end gap-4">
                             <button type="button" onclick="saveMenu()" 
-                                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-base font-medium">
+                                    class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-base font-medium">
                                 <i class="fas fa-save mr-2"></i>Save Menu
                             </button>
                         </div>
@@ -159,25 +159,27 @@ include 'includes/header.php';
 
 <!-- Template for category -->
 <template id="categoryTemplate">
-    <div class="category-item border border-gray-200 rounded-lg p-6 draggable-category" data-category-id="">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center space-x-4">
+    <div class="category-item border border-gray-200 rounded-lg p-4 sm:p-6 draggable-category" data-category-id="">
+        <div class="font-semibold mb-2 text-gray-800">Category</div>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+            <div class="flex items-center space-x-2 sm:space-x-4">
                 <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
-                <input type="text" class="category-name border border-gray-300 rounded-lg px-4 py-3 text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Category Name" required>
+                <input type="text" class="category-name border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-lg sm:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full max-w-xs sm:max-w-none" placeholder="Category Name" required>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 sm:space-x-3">
                 <button type="button" onclick="removeCategory(this)" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-base font-medium">
+                        class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-medium">
                     <i class="fas fa-trash mr-2"></i>Remove
                 </button>
             </div>
         </div>
+        <div class="font-semibold mb-2 text-gray-800">Items</div>
         <div class="category-items space-y-4 sortable-items">
             <!-- Items will be added here -->
         </div>
         <div class="mt-4 pt-4 border-t border-gray-200">
             <button type="button" onclick="addItem(this)" 
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-base font-medium">
+                    class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-base font-medium">
                 <i class="fas fa-plus mr-2"></i>Add Item
             </button>
         </div>
@@ -186,15 +188,17 @@ include 'includes/header.php';
 
 <!-- Template for item -->
 <template id="itemTemplate">
-    <div class="item-row flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-200 draggable-item" data-item-id="">
-        <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
-        <input type="text" class="item-name flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Item Name" required>
-        <div class="flex items-center space-x-3">
-            <span class="text-gray-600 text-lg font-medium">₹</span>
-            <input type="number" class="item-price w-32 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00" step="0.01" min="0" required>
+    <div class="item-row flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-200 draggable-item" data-item-id="">
+        <div class="flex items-center mb-2 sm:mb-0">
+            <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
+        </div>
+        <input type="text" class="item-name flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full" placeholder="Item Name" required>
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <span class="text-gray-600 text-base sm:text-lg font-medium">₹</span>
+            <input type="number" class="item-price w-full sm:w-32 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00" step="0.01" min="0" required>
         </div>
         <button type="button" onclick="removeItem(this)" 
-                class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-base font-medium">
+                class="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded-lg text-sm sm:text-base font-medium mt-2 sm:mt-0">
             <i class="fas fa-times mr-1"></i>Remove
         </button>
     </div>
