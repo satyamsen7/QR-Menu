@@ -26,7 +26,7 @@ if (!$vendor) {
     exit();
 }
 
-$menu_url = "https://qr-ss.com/" . $vendor['username'];
+$menu_url = "https://qr-menu.42web.io/" . $vendor['username'];
 
 include 'includes/header.php';
 ?>
@@ -206,11 +206,14 @@ function renderQRDesign() {
     let html = '';
     let headerHtml = qrHeader ? `<div class="text-lg font-semibold mb-2">${qrHeader}</div>` : '';
     let footerHtml = qrFooter ? `<div class="text-sm text-gray-600 mt-2">${qrFooter}</div>` : '';
-    const qrImgTag = `<div class="mx-auto mb-2">
-        <img id="qrImg" 
-             src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(menuUrl)}&size=256x256" 
-             width="256" height="256" alt="QR Code" crossorigin="anonymous">
-    </div>`;
+    // Center the QR image using flexbox
+    const qrImgTag = `
+        <div class="flex justify-center mb-2">
+            <img id="qrImg" 
+                 src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(menuUrl)}&size=256x256" 
+                 width="256" height="256" alt="QR Code" crossorigin="anonymous">
+        </div>
+    `;
     if (currentDesign === 'classic') {
         html = `
             <div class="qr-design-classic">
