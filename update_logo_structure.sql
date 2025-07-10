@@ -27,3 +27,15 @@ UPDATE menu_items SET price_full = price WHERE price_full = 0.00;
 
 -- Drop the old price column (optional - you can keep it for backward compatibility)
 -- ALTER TABLE menu_items DROP COLUMN price; 
+
+
+-- Allow duplicate phone numbers in users table
+USE qr_menu_system;
+
+-- Remove unique constraint from phone column
+ALTER TABLE users DROP INDEX phone;
+
+-- Note: If the above doesn't work, try this alternative:
+-- ALTER TABLE users DROP INDEX phone_2;
+-- or
+-- SHOW INDEX FROM users; -- to see the exact index name 

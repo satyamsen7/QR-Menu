@@ -56,10 +56,10 @@
                         <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Contact</h3>
                         <div class="space-y-2">
                             <p class="text-gray-300 text-sm lg:text-base flex items-center">
-                                <i class="fas fa-envelope mr-2 text-xs"></i>support@qrmenu.com
+                                <i class="fas fa-envelope mr-2 text-xs"></i>shyomex.pvt.ltd@gmail.com
                             </p>
                             <p class="text-gray-300 text-sm lg:text-base flex items-center">
-                                <i class="fas fa-phone mr-2 text-xs"></i>+1 (555) 123-4567
+                                <i class="fas fa-phone mr-2 text-xs"></i>+91 7580919806
                             </p>
                         </div>
                         <div class="mt-4">
@@ -73,7 +73,7 @@
                 <!-- Footer for non-authenticated users -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     <div class="sm:col-span-2 lg:col-span-1">
-                        <h3 class="text-lg font-semibold mb-3 lg:mb-4">QR Menu System</h3>
+                        <h3 class="text-lg font-semibold mb-3 lg:mb-4">QR Menu</h3>
                         <p class="text-gray-300 text-sm lg:text-base leading-relaxed">Create digital menus with QR codes for your restaurant, hotel, or food business.</p>
                     </div>
                     <div>
@@ -94,10 +94,10 @@
                         <h3 class="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Contact</h3>
                         <div class="space-y-2">
                             <p class="text-gray-300 text-sm lg:text-base flex items-center">
-                                <i class="fas fa-envelope mr-2 text-xs"></i>support@qrmenu.com
+                                <i class="fas fa-envelope mr-2 text-xs"></i>shyomex.pvt.ltd@gmail.com
                             </p>
                             <p class="text-gray-300 text-sm lg:text-base flex items-center">
-                                <i class="fas fa-phone mr-2 text-xs"></i>+1 (555) 123-4567
+                                <i class="fas fa-phone mr-2 text-xs"></i>+91 7580919806
                             </p>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
             
             <!-- Footer bottom -->
             <div class="border-t border-gray-700 mt-6 lg:mt-8 pt-6 lg:pt-8 text-center">
-                <p class="text-gray-300 text-sm lg:text-base">&copy; 2024 QR Menu System. All rights reserved.</p>
+                <p class="text-gray-300 text-sm lg:text-base">&copy; 2025 QR Menu. All rights reserved.</p>
             </div>
         </div>
     </footer>

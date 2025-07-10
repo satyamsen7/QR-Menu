@@ -59,20 +59,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "You must agree to the Terms and Conditions";
     }
     
-    // Check if contact already exists
+    // Check if contact already exists (only for email, allow duplicate phone numbers)
     if (empty($errors)) {
-        $field = $contact_type === 'phone' ? 'phone' : 'email';
-        $stmt = $db->prepare("SELECT id FROM users WHERE $field = ?");
-        $stmt->execute([$contact]);
-        
-        if ($stmt->rowCount() > 0) {
-            $errors[] = ucfirst($contact_type) . " already exists";
+        if ($contact_type === 'email') {
+            $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute([$contact]);
+            
+            if ($stmt->rowCount() > 0) {
+                $errors[] = "Email already exists";
+            }
         }
+        // Phone numbers are allowed to be duplicate (multiple users can use same phone)
     }
     
     // If no errors, create user
     if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Determine the field name for database insertion
+        $field = $contact_type === 'phone' ? 'phone' : 'email';
         
         $stmt = $db->prepare("INSERT INTO users (name, $field, password) VALUES (?, ?, ?)");
         if ($stmt->execute([$name, $contact, $hashed_password])) {
