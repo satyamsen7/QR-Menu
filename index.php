@@ -42,6 +42,17 @@ $routes = [
     'logout' => 'logout'
 ];
 
+// Handle OAuth routes
+if ($page === 'oauth' && isset($segments[1]) && isset($segments[2])) {
+    $provider = $segments[1];
+    $action = $segments[2];
+    
+    if ($provider === 'google' && $action === 'callback') {
+        include 'oauth/google/callback.php';
+        exit();
+    }
+}
+
 // Get the page to load
 $page_to_load = $routes[$page] ?? '404';
 

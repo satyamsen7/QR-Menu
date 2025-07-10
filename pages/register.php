@@ -1,6 +1,12 @@
 <?php
 $page_title = 'Register - QR Menu System';
 
+// Include reCAPTCHA configuration
+require_once 'config/recaptcha.php';
+
+// Include OAuth configuration
+require_once 'config/oauth.php';
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once 'config/database.php';
@@ -13,8 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
     $terms = isset($_POST['terms']);
+    $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
     
     $errors = [];
+    
+    // Verify reCAPTCHA
+    if (!verifyRecaptcha($recaptchaResponse)) {
+        $errors[] = "Please complete the reCAPTCHA verification";
+    }
     
     // Validation
     if (empty($name)) {
@@ -180,7 +192,7 @@ include 'includes/header.php';
 
                 <!-- reCAPTCHA -->
                 <div class="flex justify-center">
-                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                    <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
                 </div>
 
                 <!-- Register Button -->
@@ -253,8 +265,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function googleSignIn() {
-    // Google OAuth implementation would go here
-    alert('Google Sign-In functionality will be implemented with Google OAuth API');
+    // Redirect to Google OAuth
+    window.location.href = '<?php echo getGoogleAuthUrl(); ?>';
 }
 </script>
 
