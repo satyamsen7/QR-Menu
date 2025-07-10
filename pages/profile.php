@@ -276,7 +276,7 @@ include 'includes/header.php';
                                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                                 <div class="mt-1 flex rounded-md shadow-sm">
                                     <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                                        qr-ss.com/
+                                    qr-menu.42web.io/
                                     </span>
                                     <input type="text" id="username" name="username" 
                                            value="<?php echo htmlspecialchars($vendor['username'] ?? ''); ?>" 
