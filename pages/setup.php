@@ -163,7 +163,7 @@ include 'includes/header.php';
                         <div class="mt-1">
                             <div class="flex rounded-md shadow-sm">
                                 <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                                    qr-ss.com/
+                                qr-menu.42web.io/
                                 </span>
                                 <input id="username" name="username" type="text" 
                                        value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>"
