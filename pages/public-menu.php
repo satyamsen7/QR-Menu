@@ -46,7 +46,7 @@ $stmt->execute([$vendor['id'], $ip_address, $user_agent]);
 
 // Get menu data
 $stmt = $db->prepare("SELECT mc.name as category_name, mc.sort_order as category_order,
-                             mi.name as item_name, mi.price, mi.sort_order as item_order
+                             mi.name as item_name, mi.price_full, mi.price_half, mi.has_half_price, mi.sort_order as item_order
                       FROM menu_categories mc
                       LEFT JOIN menu_items mi ON mc.id = mi.category_id
                       WHERE mc.vendor_id = ?
@@ -64,7 +64,9 @@ foreach ($menu_data as $row) {
     if ($row['item_name']) {
         $menu_categories[$category_name][] = [
             'name' => $row['item_name'],
-            'price' => $row['price']
+            'price_full' => $row['price_full'],
+            'price_half' => $row['price_half'],
+            'has_half_price' => $row['has_half_price']
         ];
     }
 }
@@ -325,8 +327,13 @@ $hide_nav = true;
                                                 <div class="text-right">
                                                     <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200 shadow-lg">
                                                         <div class="font-playfair text-3xl md:text-4xl font-bold price-elegant">
-                                                            ₹<?php echo number_format($item['price'], 0); ?>
+                                                            ₹<?php echo number_format($item['price_full'], 0); ?>
                                                         </div>
+                                                        <?php if ($item['has_half_price'] && $item['price_half']): ?>
+                                                            <div class="text-sm text-slate-600 mt-2">
+                                                                Half: ₹<?php echo number_format($item['price_half'], 0); ?>
+                                                            </div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,9 +1,12 @@
 <?php
-session_start();
+// Check if session is already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Include required files
-require_once '../../config/database.php';
-require_once '../../config/oauth.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/oauth.php';
 
 // Get the authorization code from Google
 $code = $_GET['code'] ?? '';
@@ -22,11 +25,16 @@ if (empty($code)) {
 }
 
 try {
+    // Check if Google OAuth is properly configured
+    if (!defined('GOOGLE_CLIENT_ID') || GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+        throw new Exception('Google OAuth is not properly configured. Please contact the administrator.');
+    }
+    
     // Exchange authorization code for access token
     $token_data = exchangeGoogleCodeForToken($code);
     
     if (!isset($token_data['access_token'])) {
-        throw new Exception('Failed to get access token');
+        throw new Exception('Failed to get access token: ' . ($token_data['error_description'] ?? 'Unknown error'));
     }
     
     // Get user information from Google

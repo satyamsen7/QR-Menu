@@ -51,8 +51,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert items
             $item_sort_order = 1;
             foreach ($category['items'] as $item) {
-                $stmt = $db->prepare("INSERT INTO menu_items (category_id, name, price, sort_order) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$category_id, $item['name'], $item['price'], $item_sort_order]);
+                $stmt = $db->prepare("INSERT INTO menu_items (category_id, name, price, price_full, price_half, has_half_price, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([
+                    $category_id, 
+                    $item['name'], 
+                    $item['price_full'], // Keep old price column for backward compatibility
+                    $item['price_full'], 
+                    $item['price_half'] ?? null, 
+                    !empty($item['price_half']), 
+                    $item_sort_order
+                ]);
                 $item_sort_order++;
             }
             $sort_order++;
@@ -65,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get existing menu data
 $stmt = $db->prepare("SELECT mc.id as category_id, mc.name as category_name, mc.sort_order,
-                             mi.id as item_id, mi.name as item_name, mi.price, mi.sort_order as item_sort_order
+                             mi.id as item_id, mi.name as item_name, mi.price_full, mi.price_half, mi.has_half_price, mi.sort_order as item_sort_order
                       FROM menu_categories mc
                       LEFT JOIN menu_items mi ON mc.id = mi.category_id
                       WHERE mc.vendor_id = ?
@@ -88,7 +96,9 @@ foreach ($menu_data as $row) {
         $menu_structure[$category_id]['items'][] = [
             'id' => $row['item_id'],
             'name' => $row['item_name'],
-            'price' => $row['price']
+            'price_full' => $row['price_full'],
+            'price_half' => $row['price_half'],
+            'has_half_price' => $row['has_half_price']
         ];
     }
 }
@@ -193,10 +203,19 @@ include 'includes/header.php';
             <i class="fas fa-grip-vertical text-gray-400 cursor-move handle text-lg drag-handle"></i>
         </div>
         <input type="text" class="item-name flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full" placeholder="Item Name" required>
+        
+        <!-- Half Price (Optional) -->
         <div class="flex items-center space-x-2 sm:space-x-3">
-            <span class="text-gray-600 text-base sm:text-lg font-medium">₹</span>
-            <input type="number" class="item-price w-full sm:w-32 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00" step="0.01" min="0" required>
+            <span class="text-gray-600 text-base sm:text-lg font-medium">Half ₹</span>
+            <input type="number" class="item-price-half w-full sm:w-32 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Optional" step="0.01" min="0">
         </div>
+        
+        <!-- Full Price -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <span class="text-gray-600 text-base sm:text-lg font-medium">Full ₹</span>
+            <input type="number" class="item-price-full w-full sm:w-32 border border-gray-300 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00" step="0.01" min="0" required>
+        </div>
+        
         <button type="button" onclick="removeItem(this)" 
                 class="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-2 rounded-lg text-sm sm:text-base font-medium mt-2 sm:mt-0">
             <i class="fas fa-times mr-1"></i>Remove
@@ -274,7 +293,10 @@ function addItem(button, existingItem = null) {
     // Set item data if provided
     if (existingItem) {
         itemDiv.querySelector('.item-name').value = existingItem.name;
-        itemDiv.querySelector('.item-price').value = existingItem.price;
+        itemDiv.querySelector('.item-price-full').value = existingItem.price_full;
+        if (existingItem.price_half) {
+            itemDiv.querySelector('.item-price-half').value = existingItem.price_half;
+        }
     }
     
     itemsContainer.appendChild(itemElement);
@@ -308,9 +330,11 @@ function updateMenuData() {
         };
         
         categoryDiv.querySelectorAll('.item-row').forEach(itemDiv => {
+            const priceHalf = itemDiv.querySelector('.item-price-half').value;
             category.items.push({
                 name: itemDiv.querySelector('.item-name').value,
-                price: parseFloat(itemDiv.querySelector('.item-price').value) || 0
+                price_full: parseFloat(itemDiv.querySelector('.item-price-full').value) || 0,
+                price_half: priceHalf ? parseFloat(priceHalf) : null
             });
         });
         
@@ -380,7 +404,7 @@ function scheduleAutoSave() {
 
 // Add event listeners for auto-save
 document.addEventListener('input', function(e) {
-    if (e.target.matches('.category-name, .item-name, .item-price')) {
+    if (e.target.matches('.category-name, .item-name, .item-price-full, .item-price-half')) {
         scheduleAutoSave();
     }
 });

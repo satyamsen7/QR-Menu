@@ -44,7 +44,7 @@ $stmt->execute([$vendor['id'], $vendor['id']]);
 $menu_stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get recent menu items for preview
-$stmt = $db->prepare("SELECT mc.name as category_name, mi.name as item_name, mi.price 
+$stmt = $db->prepare("SELECT mc.name as category_name, mi.name as item_name, mi.price_full, mi.price_half, mi.has_half_price 
                       FROM menu_items mi 
                       JOIN menu_categories mc ON mi.category_id = mc.id 
                       WHERE mc.vendor_id = ? 
@@ -159,7 +159,12 @@ include 'includes/header.php';
                             <?php foreach ($recent_items as $item): ?>
                                 <div class="flex justify-between text-sm text-gray-600">
                                     <span><?php echo htmlspecialchars($item['item_name']); ?></span>
-                                    <span>₹<?php echo number_format($item['price'], 2); ?></span>
+                                    <span>
+                                        ₹<?php echo number_format($item['price_full'], 2); ?>
+                                        <?php if ($item['has_half_price'] && $item['price_half']): ?>
+                                            <span class="text-xs text-gray-500">(Half: ₹<?php echo number_format($item['price_half'], 2); ?>)</span>
+                                        <?php endif; ?>
+                                    </span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
