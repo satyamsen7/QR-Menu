@@ -11,7 +11,7 @@
  */
 
 // reCAPTCHA Configuration
-define('RECAPTCHA_SITE_KEY', 'xxx'); // Replace with your Site Key
+define('RECAPTCHA_SITE_KEY', 'xxxx'); // Replace with your Site Key
 define('RECAPTCHA_SECRET_KEY', 'xxx'); // Replace with your Secret Key
 
 // reCAPTCHA Verification Function
