@@ -58,6 +58,22 @@ try {
         $_SESSION['user_id'] = $existing_user['id'];
         $_SESSION['user_name'] = $existing_user['name'];
         $_SESSION['setup_complete'] = $existing_user['is_setup_complete'] ?? false;
+        $_SESSION['login_method'] = 'google_sso'; // Mark as Google SSO user
+        
+        // For Google SSO users, create a long-term session (remember me)
+        $token = bin2hex(random_bytes(32));
+        $expires = date('Y-m-d H:i:s', strtotime('+365 days')); // 1 year session for SSO users
+        
+        // Clear any existing sessions for this user
+        $stmt = $db->prepare("DELETE FROM user_sessions WHERE user_id = ?");
+        $stmt->execute([$existing_user['id']]);
+        
+        // Insert new long-term session
+        $stmt = $db->prepare("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)");
+        $stmt->execute([$existing_user['id'], $token, $expires]);
+        
+        // Set remember me cookie for 1 year
+        setcookie('remember_token', $token, time() + (365 * 24 * 60 * 60), '/');
         
         // Redirect based on setup status
         if (!$existing_user['is_setup_complete']) {
@@ -84,6 +100,18 @@ try {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['user_name'] = $name;
             $_SESSION['setup_complete'] = false;
+            $_SESSION['login_method'] = 'google_sso'; // Mark as Google SSO user
+            
+            // For new Google SSO users, also create a long-term session
+            $token = bin2hex(random_bytes(32));
+            $expires = date('Y-m-d H:i:s', strtotime('+365 days')); // 1 year session for SSO users
+            
+            // Insert new long-term session
+            $stmt = $db->prepare("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)");
+            $stmt->execute([$user_id, $token, $expires]);
+            
+            // Set remember me cookie for 1 year
+            setcookie('remember_token', $token, time() + (365 * 24 * 60 * 60), '/');
             
             // Redirect to setup
             header('Location: ../../setup');

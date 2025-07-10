@@ -15,8 +15,8 @@
  */
 
 // Google OAuth Configuration
-define('GOOGLE_CLIENT_ID', 'xxxxx');
-define('GOOGLE_CLIENT_SECRET', 'xxxx');
+define('GOOGLE_CLIENT_ID', 'xxx);
+define('GOOGLE_CLIENT_SECRET', 'xxx');
 define('GOOGLE_REDIRECT_URI', 'http://localhost/QR-Menu/oauth/google/callback'); // Update for production
 
 // Facebook OAuth Configuration (Future Implementation)

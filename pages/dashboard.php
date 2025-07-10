@@ -60,12 +60,33 @@ include 'includes/header.php';
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Welcome Section -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                Welcome back, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
-            </h1>
-            <p class="mt-2 text-gray-600">
-                Manage your digital menu and track customer engagement
-            </p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Welcome back, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
+                    </h1>
+                    <p class="mt-2 text-gray-600">
+                        Manage your digital menu and track customer engagement
+                    </p>
+                </div>
+                <?php if (isset($_SESSION['login_method'])): ?>
+                    <div class="flex items-center space-x-2">
+                        <?php if ($_SESSION['login_method'] === 'google_sso'): ?>
+                            <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <i class="fab fa-google mr-2"></i>Google SSO
+                            </div>
+                        <?php elseif ($_SESSION['login_method'] === 'email_password'): ?>
+                            <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <i class="fas fa-envelope mr-2"></i>Email Login
+                            </div>
+                        <?php elseif ($_SESSION['login_method'] === 'remember_me'): ?>
+                            <div class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <i class="fas fa-clock mr-2"></i>Remember Me
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
 
         <!-- Stats Grid -->
