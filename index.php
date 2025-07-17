@@ -1,4 +1,10 @@
 <?php
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 // Clean URL routing
@@ -7,11 +13,7 @@ $script_name = $_SERVER['SCRIPT_NAME'];
 
 // Auto-detect base path
 $base_path = dirname($script_name);
-if ($base_path === '/') {
-    $base_path = '';
-} else {
-    $base_path .= '/';
-}
+$base_path = ($base_path === '/') ? '' : $base_path . '/';
 
 // Remove base path from request URI
 $path = str_replace($base_path, '', $request_uri);
@@ -22,12 +24,12 @@ $path = trim($path, '/');
 $segments = explode('/', $path);
 $page = $segments[0] ?? 'home';
 
-// Handle dashboard routes
+// Handle dashboard sub-routes
 if ($page === 'dashboard' && isset($segments[1])) {
     $page = 'dashboard/' . $segments[1];
 }
 
-// Define routes
+// Define valid routes
 $routes = [
     '' => 'home',
     'home' => 'home',
@@ -44,27 +46,27 @@ $routes = [
     'logout' => 'logout'
 ];
 
-// Handle OAuth routes
-if ($page === 'oauth' && isset($segments[1]) && isset($segments[2])) {
+// OAuth route handling
+if ($page === 'oauth' && isset($segments[1], $segments[2])) {
     $provider = $segments[1];
     $action = $segments[2];
-    
+
     if ($provider === 'google' && $action === 'callback') {
-        include 'oauth/google/callback.php';
+        require_once 'oauth/google/callback.php';
         exit();
     }
 }
 
-// Get the page to load
+// Determine which page to load
 $page_to_load = $routes[$page] ?? '404';
 
-// Special handling for public menu pages (username in URL)
+// Handle public menus by username (if no valid route match)
 if ($page_to_load === '404' && !empty($page) && preg_match('/^[a-zA-Z0-9_-]+$/', $page)) {
     $page_to_load = 'public-menu';
     $_GET['username'] = $page;
 }
 
-// Check authentication for protected pages
+// Protect certain pages (require login)
 $protected_pages = ['dashboard', 'menu-builder', 'qr-generator', 'setup', 'profile'];
 if (in_array($page_to_load, $protected_pages) && !isset($_SESSION['user_id'])) {
     header('Location: ' . $base_path . 'login');
@@ -73,15 +75,15 @@ if (in_array($page_to_load, $protected_pages) && !isset($_SESSION['user_id'])) {
 
 // Handle logout
 if ($page_to_load === 'logout') {
-    include 'logout.php';
+    require_once 'logout.php';
     exit();
 }
 
-// Load the appropriate page
+// Include page content
 $page_file = "pages/{$page_to_load}.php";
 if (file_exists($page_file)) {
-    include $page_file;
+    require_once $page_file;
 } else {
-    include "pages/404.php";
+    require_once "pages/404.php";
 }
-?> 
+?>

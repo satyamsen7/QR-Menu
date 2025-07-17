@@ -41,4 +41,4 @@ function verifyRecaptcha($recaptchaResponse) {
     
     return $response['success'] ?? false;
 }
-?> 
+?>

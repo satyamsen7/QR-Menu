@@ -19,6 +19,6 @@ if (isset($_COOKIE['remember_token'])) {
 }
 
 // Redirect to home page
-header('Location: /QR-Menu/');
+header('Location: /');
 exit();
 ?> 

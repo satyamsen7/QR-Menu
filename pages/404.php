@@ -13,10 +13,10 @@ include 'includes/header.php';
         </div>
         
         <div class="space-x-4">
-            <a href="/QR-Menu/" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium">
+            <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium">
                 <i class="fas fa-home mr-2"></i>Go Home
             </a>
-            <a href="/QR-Menu/login" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-md font-medium">
+            <a href="/login" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-md font-medium">
                 <i class="fas fa-sign-in-alt mr-2"></i>Login
             </a>
         </div>

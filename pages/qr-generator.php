@@ -223,7 +223,7 @@ function renderQRDesign() {
                 ${qrImgTag}
                 <div class="text-sm text-gray-700">${menuUrl}</div>
                 ${footerHtml}
-                <span class="text-xs italic text-gray-500">Powered by Satyam</span>
+                <span class="text-xs italic text-gray-500">Powered by QR-Menu.42web.io</span>
             </div>
         `;
     } else if (currentDesign === 'modern') {
@@ -235,7 +235,7 @@ function renderQRDesign() {
                 <div class="text-base font-semibold text-gray-900">${businessName}</div>
                 <div class="text-xs text-gray-500 mt-1">${menuUrl}</div>
                 ${footerHtml}
-                <span class="text-xs italic text-gray-500">Powered by Satyam</span>  
+                <span class="text-xs italic text-gray-500">Powered by QR-Menu.42web.io</span>  
             </div>
         `;
     }

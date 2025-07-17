@@ -30,17 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $base_path .= '/';
             }
-            $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . $base_path . "reset-password?token=$token";
+            $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . $base_path . "/reset-password?token=$token";
             $mail = new PHPMailer(true);
             try {
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'noreply.netbot@gmail.com'; // Your Gmail address
-                $mail->Password = 'xxxx'; // App password, not Gmail password
+                $mail->Password = 'ntwl fpqn ilbe dsfp'; // App password, not Gmail password
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
-                $mail->setFrom('YOUR_GMAIL@gmail.com', 'QR Menu System');
+                $mail->setFrom('noreply.netbot@gmail.com', 'QR Menu System');
                 $mail->addAddress($email);
                 $mail->isHTML(true);
                 $mail->Subject = 'Password Reset Request';

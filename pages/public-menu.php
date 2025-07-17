@@ -28,7 +28,7 @@ if (!$vendor) {
             </div>
             <h1 class="text-4xl font-bold text-white mb-4">Menu Not Found</h1>
             <p class="text-slate-300 mb-8">The menu you're looking for doesn't exist or has been removed.</p>
-            <a href="/QR-Menu/" class="inline-block bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+            <a href="/" class="inline-block bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
                 Return Home
             </a>
         </div>
@@ -206,9 +206,10 @@ $hide_nav = true;
                 <div class="mb-8">
                     <?php if (!empty($vendor['logo_data'])): ?>
                         <div class="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-amber-400/30 premium-shadow">
-                            <img src="/QR-Menu/public-logo-img.php?username=<?php echo urlencode($vendor['username']); ?>"
-                                 alt="<?php echo htmlspecialchars($vendor['business_name']); ?>"
-                                 class="w-full h-full object-cover">
+                            <img src="/public-logo-img.php?username=<?php echo urlencode($vendor['username']); ?>"
+     alt="<?php echo htmlspecialchars($vendor['business_name']); ?>"
+     class="w-full h-full object-cover">
+
                         </div>
                     <?php else: ?>
                         <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center ring-4 ring-amber-400/30 premium-shadow">
@@ -402,7 +403,7 @@ $hide_nav = true;
                 </div>
                 
                 <div class="text-center">
-                    <h3 class="font-playfair text-2xl font-bold mb-6 text-amber-400">Connect With Us</h3>
+                    
                     <div class="space-y-4">
                         <button onclick="openShareModal()" 
                                 class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
@@ -428,7 +429,7 @@ $hide_nav = true;
             <div class="border-t border-slate-700 mt-12 pt-8 text-center">
                 <div class="gold-line w-32 mx-auto mb-6"></div>
                 <p class="text-slate-400 mb-2">
-                    Powered by <span class="font-semibold text-amber-400">Premium Digital Menus</span>
+                    Powered by <span class="font-semibold text-amber-400">QR-Menu.42web.io</span>
                 </p>
                 <p class="text-xs text-slate-500">
                     Scan QR code to access this menu anytime • Digital dining experience

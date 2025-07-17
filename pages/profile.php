@@ -3,7 +3,7 @@ $page_title = 'Profile - QR Menu System';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /QR-Menu/login');
+    header('Location: /login');
     exit();
 }
 
@@ -213,7 +213,7 @@ include 'includes/header.php';
                             
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" 
+                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" ...
                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             </div>
                             
@@ -314,8 +314,9 @@ include 'includes/header.php';
                 <div class="flex items-center space-x-6">
                     <div class="flex-shrink-0">
                         <?php if (!empty($vendor['logo_data'])): ?>
-                            <img src="/QR-Menu/logo-img.php" 
-                                 alt="Business Logo" class="h-20 w-20 rounded-lg object-cover border">
+                            <img src="<?= BASE_URL ?>logo-img.php?username=<?= urlencode($vendor['username']) ?>" 
+     alt="Business Logo" class="h-20 w-20 rounded-lg object-cover border">
+
                         <?php else: ?>
                             <div class="h-20 w-20 rounded-lg bg-gray-200 flex items-center justify-center">
                                 <i class="fas fa-image text-gray-400 text-2xl"></i>

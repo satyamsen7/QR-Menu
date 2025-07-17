@@ -3,12 +3,12 @@ $page_title = 'Menu Builder - QR Menu System';
 
 // Check if user is logged in and setup is complete
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /QR-Menu/login');
+    header('Location: /login');
     exit();
 }
 
 if (!$_SESSION['setup_complete']) {
-    header('Location: /QR-Menu/setup');
+    header('Location: /setup');
     exit();
 }
 
@@ -22,7 +22,7 @@ $stmt->execute([$_SESSION['user_id']]);
 $vendor = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$vendor) {
-    header('Location: /QR-Menu/setup');
+    header('Location: /setup');
     exit();
 }
 
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sort_order++;
         }
         
-        header('Location: /QR-Menu/dashboard/qr');
+        header('Location: /dashboard/qr');
         exit();
     }
 }

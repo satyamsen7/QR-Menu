@@ -9,10 +9,10 @@ if (empty($username)) {
 }
 
 // Direct database connection
-$host = 'localhost';
-$db_name = 'qr_menu_system';
-$username_db = 'root';
-$password = '';
+$host = 'sql309.infinityfree.com';
+$db_name = 'if0_39433696_QR_Menu';
+$username_db = 'if0_39433696';
+$password = 'vUj3t1ckZKJzmi';
 
 try {
     $db = new PDO("mysql:host=$host;dbname=$db_name", $username_db, $password);

@@ -168,7 +168,7 @@ include 'includes/header.php';
                             <p class="text-sm text-gray-600">Categories: <?php echo $menu_stats['total_categories']; ?></p>
                             <p class="text-sm text-gray-600">Items: <?php echo $menu_stats['total_items']; ?></p>
                         </div>
-                        <a href="/QR-Menu/dashboard/menu" 
+                        <a href="/dashboard/menu" 
                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
                             <i class="fas fa-edit mr-2"></i>Edit Menu
                         </a>
@@ -205,10 +205,10 @@ include 'includes/header.php';
                         <div class="mb-4">
                             <p class="text-sm text-gray-600">Your menu URL:</p>
                             <p class="text-sm font-medium text-blue-600">
-                                qr-ss.com/<?php echo htmlspecialchars($vendor['username']); ?>
+                                https://qr-menu.42web.io/<?php echo htmlspecialchars($vendor['username']); ?>
                             </p>
                         </div>
-                        <a href="/QR-Menu/dashboard/qr" 
+                        <a href="/dashboard/qr" 
                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
                             <i class="fas fa-qrcode mr-2"></i>View QR Code
                         </a>
@@ -235,9 +235,7 @@ include 'includes/header.php';
                     <div>
                         <h4 class="text-sm font-medium text-gray-700 mb-2">Logo</h4>
                         <?php if (!empty($vendor['logo_data'])): ?>
-                            <img src="/QR-Menu/logo-img.php" 
-                                 alt="Business Logo" 
-                                 class="w-20 h-20 object-cover rounded-lg border">
+                            <img src="<?= BASE_URL ?>logo-img.php?username=<?= urlencode($vendor['username']) ?>" alt="Business Logo" class="w-20 h-20 object-cover rounded-lg border">
                         <?php else: ?>
                             <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center border">
                                 <i class="fas fa-image text-gray-400"></i>

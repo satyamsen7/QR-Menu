@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['setup_complete'] = true;
             $_SESSION['vendor_username'] = $username;
             
-            header('Location: /QR-Menu/dashboard');
+            header('Location: /dashboard');
             exit();
         } else {
             $errors[] = "Setup failed. Please try again.";
