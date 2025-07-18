@@ -1,4 +1,11 @@
 <?php
+// Add function to split long words in menu item names
+function split_long_words($text) {
+    return preg_replace_callback('/\\b\\w{8,}\\b/u', function($matches) {
+        $word = $matches[0];
+        return substr($word, 0, 6) . '- ' . substr($word, 6);
+    }, $text);
+}
 // Get username from URL
 $username = $_GET['username'] ?? '';
 if (empty($username)) {
@@ -312,8 +319,8 @@ $hide_nav = true;
                                             <div class="flex items-center justify-between">
                                                 <!-- Item Name -->
                                                 <div class="flex-1 pr-8">
-                                                    <h3 class="font-playfair text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">
-                                                        <?php echo htmlspecialchars($item['name']); ?>
+                                                    <h3 class="font-playfair text-2xl md:text-3xl font-semibold text-slate-800 leading-tight break-words">
+                                                        <?php echo htmlspecialchars(split_long_words($item['name'])); ?>
                                                     </h3>
                                                     
                                                     <!-- Simple decorative dots -->
